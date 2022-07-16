@@ -1,24 +1,22 @@
 import { Media } from "../models/media.js";
 import axios from "axios";
 
-function animeSearch(req, res) {
+function search(req, res) {
   axios
-    .get(`https://kitsu.io/api/edge//anime?filter[text]=${req.body.term}`)
+    .get(
+      `https://kitsu.io/api/edge//${req.params.type}?filter[text]=${req.body.title}`
+    )
     .then((response) => {
       console.log(response.data.data);
       res.json(response.data.data);
-    });
-}
-
-function mangaSearch(req, res) {
-  axios
-    .get(`https://kitsu.io/api/edge//manga?filter[text]=${req.body.term}`)
-    .then((response) => {
-      console.log(response.data.data);
-      res.json(response.data.data);
+    })
+    .catch((err) => {
+      console.log(err);
+      res.status(500).json({ err: err.errmsg });
     });
 }
 
 
 
-export { animeSearch, mangaSearch };
+
+export { search};
