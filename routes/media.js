@@ -6,6 +6,7 @@ const router = Router();
 
 // Public Routes
 router.get("/search/:type", mediaCtrl.search);
+router.get("/collection/:type/:collection", mediaCtrl.collection);
 
 
 // Private Routes
