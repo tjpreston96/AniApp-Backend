@@ -19,7 +19,7 @@ function search(req, res) {
 function collection(req, res) {
   axios
     .get(
-      `https://kitsu.io/api/edge//${req.params.type}?filter[id]=${req.params.collection}`
+      `https://kitsu.io/api/edge//${req.params.type}?filter[id]=${req.body.collection}`
     )
     .then((response) => {
       res.json(response.data.data);
