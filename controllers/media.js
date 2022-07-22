@@ -42,10 +42,12 @@ function add(req, res) {
 }
 
 function userCollection(req, res) {
-  let collection = [];
   Media.find({ favoritedBy: req.user.profile, type: req.params.type }).then(
     (media) => {
-      media.map((media) => collection.push(media.id));
+      let collection = [];
+      media.map((media) => {
+        collection.push(media.id);
+      });
       res.json(collection);
     }
   );
