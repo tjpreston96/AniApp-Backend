@@ -7,7 +7,6 @@ function search(req, res) {
       `https://kitsu.io/api/edge//${req.params.type}?filter[text]=${req.body.title}`
     )
     .then((response) => {
-      console.log(response.data.data);
       res.json(response.data.data);
     })
     .catch((err) => {
@@ -30,4 +29,17 @@ function collection(req, res) {
     });
 }
 
-export { search, collection };
+function add(req, res) {
+  req.body.favoritedBy = req.user.profile;
+  console.log(req.params.type);
+  Media.findOne({ id: req.body.id, type: req.body.type }).then((media) => {
+    if (media) {
+      media.favoritedBy.push(req.user.profile);
+      media.save().then((media) => res.json(media));
+    } else {
+      Media.create(req.body).then((media) => res.json(media));
+    }
+  });
+}
+
+export { search, collection, add };
