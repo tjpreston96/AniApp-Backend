@@ -11,5 +11,7 @@ router.post("/collection/:type", mediaCtrl.collection);
 // Private Routes
 router.use(decodeUserFromToken);
 router.post("/collection/:type/add", checkAuth, mediaCtrl.add);
+router.get("/user/collection/:type", checkAuth, mediaCtrl.userCollection);
+
 
 export { router };
