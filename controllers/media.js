@@ -31,7 +31,6 @@ function collection(req, res) {
 
 function add(req, res) {
   req.body.favoritedBy = req.user.profile;
-  console.log(req.params.type);
   Media.findOne({ id: req.body.id, type: req.body.type }).then((media) => {
     if (media) {
       media.favoritedBy.push(req.user.profile);
@@ -42,4 +41,14 @@ function add(req, res) {
   });
 }
 
-export { search, collection, add };
+function userCollection(req, res) {
+  let collection = [];
+  Media.find({ favoritedBy: req.user.profile, type: req.params.type }).then(
+    (media) => {
+      media.map((media) => collection.push(media.id));
+      res.json(collection);
+    }
+  );
+}
+
+export { search, collection, add, userCollection };
