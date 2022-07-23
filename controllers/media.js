@@ -41,6 +41,14 @@ function add(req, res) {
   });
 }
 
+function remove(req, res) {
+  Media.findOne({ id: req.body.id, type: req.body.type }).then((media) => {
+    let idx = media.favoritedBy.indexOf(req.user.profile);
+    media.favoritedBy.splice(idx, 1);
+    media.save().then((media) => res.json(media));
+  });
+}
+
 function userCollection(req, res) {
   Media.find({ favoritedBy: req.user.profile, type: req.params.type }).then(
     (media) => {
@@ -53,4 +61,4 @@ function userCollection(req, res) {
   );
 }
 
-export { search, collection, add, userCollection };
+export { search, collection, add, remove, userCollection };
