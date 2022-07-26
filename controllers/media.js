@@ -49,7 +49,7 @@ function remove(req, res) {
   });
 }
 
-function userCollection(req, res) {
+function currentUserCollection(req, res) {
   Media.find({ favoritedBy: req.user.profile, type: req.params.type }).then(
     (media) => {
       let collection = [];
@@ -61,4 +61,33 @@ function userCollection(req, res) {
   );
 }
 
-export { search, collection, add, remove, userCollection };
+function userCollection(req, res) {
+  Media.find({ favoritedBy: req.user.profile, type: req.params.type })
+    .then((media) => {
+      let collection = "";
+      media.map((media) => (collection += `${media.id},`));
+      return collection;
+    })
+    .then((collection) => {
+      axios
+        .get(
+          `https://kitsu.io/api/edge//${req.params.type}?filter[id]=${collection}`
+        )
+        .then((response) => {
+          res.json(response.data.data);
+        })
+        .catch((err) => {
+          console.log(err);
+          res.status(500).json({ err: err.errmsg });
+        });
+    });
+}
+
+export {
+  search,
+  collection,
+  add,
+  remove,
+  currentUserCollection,
+  userCollection,
+};
